@@ -433,19 +433,26 @@ def seed_all():
         }
     ]
 
+    import hashlib
+    prev_h = "0" * 64
     for a in initial_audits:
+        rec_data = f"{prev_h}|{a['timestamp']}|{a['user_id']}|{a['action']}|{a['decision']}|"
+        rec_h = hashlib.sha256(rec_data.encode('utf-8')).hexdigest()
         cursor.execute("""
         INSERT INTO audit_logs (
             id, audit_code, timestamp, user_id, user_name, user_role, org_id, org_name,
             bug_id, action, ai_recommendation_summary, evidence_summary, decision,
-            human_confirmation, is_override, override_reason, previous_value, new_value, execution_result
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            human_confirmation, is_override, override_reason, previous_value, new_value, execution_result,
+            previous_hash, record_hash
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             a["id"], a["audit_code"], a["timestamp"], a["user_id"], a["user_name"], a["user_role"],
             a["org_id"], a["org_name"], a["bug_id"], a["action"], a["ai_recommendation_summary"],
             a["evidence_summary"], a["decision"], a["human_confirmation"], a["is_override"],
-            a["override_reason"], a["previous_value"], a["new_value"], a["execution_result"]
+            a["override_reason"], a["previous_value"], a["new_value"], a["execution_result"],
+            prev_h, rec_h
         ))
+        prev_h = rec_h
 
     conn.commit()
     conn.close()

@@ -152,7 +152,7 @@ def init_db():
     );
     """)
 
-    # 8. Audit Logs (APPEND ONLY)
+    # 8. Audit Logs (APPEND ONLY + TAMPER EVIDENT HASH CHAIN)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS audit_logs (
         id TEXT PRIMARY KEY,
@@ -173,7 +173,9 @@ def init_db():
         override_reason TEXT,
         previous_value TEXT,
         new_value TEXT,
-        execution_result TEXT
+        execution_result TEXT,
+        previous_hash TEXT,
+        record_hash TEXT
     );
     """)
 

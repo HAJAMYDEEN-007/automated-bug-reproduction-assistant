@@ -228,8 +228,8 @@ def analyze_bug_report(bug: Dict[str, Any], historical_cases: List[Dict[str, Any
             "confidence": 0.91,
             "risk_level": "MEDIUM"
         })
-        prob_problem = "Legacy CSV Delimiter Mismatch (Pipe '|' vs Comma ',')",
-        prob_fail = "CSV Reader Column Mapping Engine",
+        prob_problem = "Legacy CSV Delimiter Mismatch (Pipe '|' vs Comma ',')"
+        prob_fail = "CSV Reader Column Mapping Engine"
         similar_bugs = ["BUG-189", "BUG-242"]
         matching_resolutions = ["Toggle CSV Delimiter setting to '|' in environment config."]
         rec_steps = [
